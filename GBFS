@@ -1,0 +1,77 @@
+#1: We define the graph with heuristic values
+class Graph:
+    def __init__(self):
+        self.edges = {}
+        self.heuristics = {}
+
+    def add_edge(self, from_node, to_node, cost):
+        if from_node in self.edges:
+            self.edges[from_node].append((to_node, cost))
+        else:
+            self.edges[from_node] = [(to_node, cost)]
+
+    def set_heuristic(self, node, heuristic_value):
+        self.heuristics[node] = heuristic_value
+
+#2: Greedy Best First Search function
+def greedy_best_first_search(graph, start, goal):
+    from queue import PriorityQueue
+
+    visited = set()
+    pq = PriorityQueue()
+    pq.put((graph.heuristics[start], start))
+
+    came_from = {}
+    came_from[start] = None
+
+    while not pq.empty():
+        (heuristic, current_node) = pq.get()
+
+        if current_node == goal:
+            # Goal found, reconstruct the path
+            path = []
+            while current_node is not None:
+                path.append(current_node)
+                current_node = came_from[current_node]
+            path.reverse()
+            return path
+
+        visited.add(current_node)
+
+        for (neighbor, cost) in graph.edges.get(current_node, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                came_from[neighbor] = current_node
+                pq.put((graph.heuristics[neighbor], neighbor))
+
+    return None
+
+#3: User input section
+graph = Graph()
+
+print("Enter number of edges: ")
+num_edges = int(input())
+
+print("Enter edges in the format: from_node to_node cost")
+for _ in range(num_edges):
+    from_node, to_node, cost = input().split()
+    graph.add_edge(from_node, to_node, int(cost))
+    graph.add_edge(to_node, from_node, int(cost))  # assuming undirected graph
+
+print("Enter number of nodes for heuristic values:")
+num_nodes = int(input())
+
+print("Enter node heuristic in the format: node heuristic_value")
+for _ in range(num_nodes):
+    node, heuristic = input().split()
+    graph.set_heuristic(node, int(heuristic))
+
+start = input("Enter the start node: ")
+goal = input("Enter the goal node: ")
+
+#4: Run the algorithm and display result
+path = greedy_best_first_search(graph, start, goal)
+if path:
+    print("Path found:", " -> ".join(path))
+else:
+    print("No path found.")
