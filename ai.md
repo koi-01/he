@@ -131,8 +131,64 @@ else:
     print("Game ends in a draw.")
 ```
 
-#### A*
+#### WATER JUG
 ```
+a=int(input("Enter Jug A capacity: "));
+b=int(input("Enter Jug B capacity: "));
+ai=int(input("\nInitially water in Jug A: "));
+bi=int(input("Initially water in Jug B: "));
+af=int(input("\nFinal state of Jug A: "));
+bf=int(input("Final state of Jug B: "));
+print("\nList of operations you can do:\n");
+print("  1. Fill Jug A Completely");
+print("  2. Fill Jug B Completely");
+print("  3. Empty Jug A Completely");
+print("  4. Empty Jug B Completely");
+print("  5. Pour from Jug A till Jug B filled Completely OR Jug A becomes Empty");
+print("  6. Pour from Jug B till Jug A filled Completely OR Jug B becomes Empty");
+print("  7. Pour all from Jug B to Jug A filled Completely OR Jug A becomes Empty");
+print("  8. Pour all from Jug A to Jug B filled Completely OR Jug A becomes Empty");
+print("----------------------------------------------------------\n");
+
+while ai!=af or bi!=bf:
+       op=int(input("Enter the Operation: "));
+       if(op==1):
+        ai=a;
+
+       elif(op==2):
+        bi=b;
+
+       elif(op==3):
+        ai=0;
+
+       elif(op==4):
+        bi=0;
+
+       elif(op==5):
+        if((b-bi)>=ai):
+         bi=bi+ai;
+         ai=0;
+        else:
+         ai=ai-(b-bi);
+         bi=b;
+
+       elif(op==6):
+        if((a-ai)>=bi):
+         ai=ai+bi;
+         bi=0;
+        else:
+         bi=bi-(a-ai);
+         ai=a;
+
+       elif(op==7):
+        ai=ai+bi;
+        bi=0;
+
+       elif(op==8):
+        bi=bi-ai;
+        ai=0;
+
+       print(ai,bi);
 ```
 
 #### TSP
@@ -415,4 +471,40 @@ graph = {
 print("DFS traversal starting from 'A':")
 traversal = dfs(graph, 'A')
 print(" → ".join(traversal))
+```
+
+#### MONKEY BANANA
+```
+in_room(bananas).
+in_room(chair).
+in_room(monkey).
+clever(monkey).
+can_climb(monkey, chair).
+tall(chair).
+can_move(monkey, chair, bananas).
+can_reach(monkey, banana).
+```
+
+
+#### FIBONACCI
+```
+fib(0,0).
+fib(X,Y) :-
+    X>0, fib(X,Y,_).
+fib(1,1,0).
+fib(X,Y1,Y2):-
+    X>1,
+    X1 is X-1,
+    fib(X1,Y2,Y3),
+    Y1 is Y2+Y3
+```
+
+
+#### MONKEY BANANA
+```
+```
+
+
+#### MONKEY BANANA
+```
 ```
