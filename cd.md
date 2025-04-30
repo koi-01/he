@@ -1,3 +1,184 @@
+#### EVEN or ODD
+```
+%{ 
+#include<stdio.h> 
+int i; 
+%} 
+
+%% 
+
+[0-9]+	 {i=atoi(yytext); 
+		if(i%2==0) 
+			printf("Even"); 
+		else
+		printf("Odd");} 
+%% 
+
+int yywrap(){} 
+
+/* Driver code */
+int main() 
+{ 
+
+	yylex(); 
+	return 0; 
+}
+// lex evenorodd.l
+// gcc lex.yy.c
+// ./a.out
+```
+#### count no of vowels and consonants
+```
+%{
+	int vow_count=0;
+	int const_count =0;
+%}
+
+%%
+[aeiouAEIOU] {vow_count++;}
+[a-zA-Z] {const_count++;}
+%%
+int yywrap(){}
+int main()
+{
+	printf("Enter the string of vowels and consonants:");
+	yylex();
+	printf("Number of vowels are: %d\n", vow_count);
+	printf("Number of consonants are: %d\n", const_count);
+	return 0;
+} 
+// lex vowel.l
+// cc lex.yy.c -lfl
+// ./a.out
+```
+#### count no of digits
+```
+%{
+#include <stdio.h>
+#include <string.h>
+int digit_count = 0;
+%}
+
+%%
+[0-9]+ {
+    digit_count++;
+    printf("Integer: %s, Number of digits: %d\n", yytext, (int)strlen(yytext));
+}
+%%
+
+int main() {
+    yylex();
+    return 0;
+}
+// lex digits.l
+// gcc lex.yy.c
+// ./a.out
+```
+#### no of words, characters, lines, spaces
+```
+%{
+#include<stdio.h>
+int lc=0,sc=0,tc=0,ch=0,wc=0;        // GLOBAL VARIABLES
+%}
+ 
+// RULE SECTION
+%%
+[\n] { lc++; ch+=yyleng;}
+[  \t] { sc++; ch+=yyleng;}
+[^\t] { tc++; ch+=yyleng;}
+[^\t\n ]+ { wc++;  ch+=yyleng;}  
+%%
+ 
+int yywrap(){ return 1;    }
+/*        After inputting press ctrl+d         */
+ 
+// MAIN FUNCTION
+int main(){
+    printf("Enter the Sentence : ");
+    yylex();
+    printf("Number of lines : %d\n",lc);
+    printf("Number of spaces : %d\n",sc);
+    printf("Number of tabs, words, charc : %d , %d , %d\n",tc,wc,ch);
+     
+    return 0;
+}
+// lex filename.l
+// gcc lex.yy.c
+// ./a.out
+```
+#### exp-4
+```
+//lexp.l
+%{
+int COMMENT=0;
+%}
+identifier [a-zA-Z][a-zA-Z0-9]*
+%%
+#.* {printf ("\n %s is a Preprocessor Directive",yytext);}
+int |
+float |
+main |
+if |
+else |
+printf |
+scanf |
+for |
+char |
+getch |
+while {printf("\n %s is a Keyword",yytext);}
+"/*" {COMMENT=1;}
+"*/" {COMMENT=0;}
+{identifier}\( {if(!COMMENT) printf("\n Function:\t %s",yytext);}
+\{ {if(!COMMENT) printf("\n Block Begins");
+\} {if(!COMMENT) printf("\n Block Ends");}
+{identifier}(\[[0-9]*\])? {if(!COMMENT) printf("\n %s is an Identifier",yytext);}
+\".*\" {if(!COMMENT) printf("\n %s is a String",yytext);}
+[0-9]+ {if(!COMMENT) printf("\n %s is a Number",yytext);}
+\)(\;)? {if(!COMMENT) printf("\t");ECHO;printf("\n");}
+\( ECHO;
+= {if(!COMMENT) printf("\n%s is an Assmt oprtr",yytext);}
+\<= |
+\>= |
+\< |
+== {if(!COMMENT) printf("\n %s is a Rel. Operator",yytext);}
+.|\n
+%%
+int main(int argc, char **argv)
+{
+if(argc>1)
+{
+FILE *file;
+file=fopen(argv[1],"r");
+if(!file)
+{
+printf("\n Could not open the file: %s",argv[1]);
+exit(0);
+}
+yyin=file;
+}
+yylex();
+printf("\n\n");
+return 0;
+}
+int yywrap()
+{
+return 0;
+}
+//Output:
+//test.c
+#include<stdio.h>
+main()
+{
+int fact=1,n;
+for(int i=1;i<=n;i++)
+{ fact=fact*i; }
+printf("Factorial Value of N is", fact);
+getch();
+}
+//$ lex lexp.l
+//$ cc lex.yy.c
+//$ ./a.out test.c
+```
 #### OP PRECEDENCE
 ```
 #include <stdio.h>
@@ -642,4 +823,7 @@ void eval() {
     }
     printf("The answer is: %f\n", ans);
 }
+// lex cal.c
+// gcc lex.yy.c
+// ./a.out
 ```
